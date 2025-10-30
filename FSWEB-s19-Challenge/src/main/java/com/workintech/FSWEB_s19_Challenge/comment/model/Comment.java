@@ -4,7 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.workintech.FSWEB_s19_Challenge.commentLike.model.CommentLike;
+import com.workintech.FSWEB_s19_Challenge.like.model.CommentLike;
 import com.workintech.FSWEB_s19_Challenge.tweet.model.Tweet;
 import com.workintech.FSWEB_s19_Challenge.user.model.User;
 
@@ -61,5 +61,5 @@ public class Comment {
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentLike> likes = new HashSet<>();
-    
+
 }

@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.workintech.FSWEB_s19_Challenge.comment.model.Comment;
+import com.workintech.FSWEB_s19_Challenge.like.model.TweetLike;
 import com.workintech.FSWEB_s19_Challenge.retweet.model.Retweet;
-import com.workintech.FSWEB_s19_Challenge.tweetLike.model.TweetLike;
 import com.workintech.FSWEB_s19_Challenge.user.model.User;
 
 import jakarta.persistence.CascadeType;

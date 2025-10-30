@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import com.workintech.FSWEB_s19_Challenge.comment.model.Comment;
-import com.workintech.FSWEB_s19_Challenge.commentLike.model.CommentLike;
+import com.workintech.FSWEB_s19_Challenge.like.model.CommentLike;
+import com.workintech.FSWEB_s19_Challenge.like.model.TweetLike;
 import com.workintech.FSWEB_s19_Challenge.retweet.model.Retweet;
 import com.workintech.FSWEB_s19_Challenge.tweet.model.Tweet;
-import com.workintech.FSWEB_s19_Challenge.tweetLike.model.TweetLike;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
