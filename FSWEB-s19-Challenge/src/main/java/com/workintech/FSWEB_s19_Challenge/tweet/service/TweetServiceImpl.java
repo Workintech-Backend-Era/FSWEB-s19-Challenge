@@ -48,8 +48,14 @@ public class TweetServiceImpl implements TweetService{
     }
 
     @Override
-    public void deleteTweet(Long id) {
-        tweetRepository.deleteById(id);
+    public void deleteTweet(Long id, User user) {
+        Tweet tweet = tweetRepository.findById(id).orElse(null);
+
+        if(!tweet.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("Later forbidden ex");
+        }
+
+        tweetRepository.delete(tweet);
     }
 
     @Override
@@ -60,11 +66,32 @@ public class TweetServiceImpl implements TweetService{
     }
 
     @Override
-    public TweetResponseDto updateTweet(Long id, Tweet tweet) {
+    public TweetResponseDto updateTweet(Long id, Tweet tweet, User user) {
 
         Tweet existing = tweetRepository.findById(id).orElse(null);
 
-        //Put ve patch metodlarından devam
+        if(!tweet.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("runtime for now");
+        }
+
+        existing.setContent(tweet.getContent());
+
+        return tweetMapper.toResponseDto(tweetRepository.save(existing));
+    }
+
+    @Override
+    public TweetResponseDto partialUpdateTweet(Long id, Tweet tweet, User user) {
+        Tweet existing = tweetRepository.findById(id).orElse(null);
+
+        if(!tweet.getUser().getId().equals(user.getId())){
+            throw new RuntimeException("later forbidden ex");
+        }
+
+        if(tweet.getContent()!=null && tweet.getContent().isBlank()){
+            existing.setContent(tweet.getContent());
+        }
+
+        return tweetMapper.toResponseDto(tweetRepository.save(existing));
     }
 
 }

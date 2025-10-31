@@ -3,8 +3,10 @@ package com.workintech.FSWEB_s19_Challenge.tweet.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,8 +29,7 @@ public class TweetController {
     private final TweetService tweetService;
 
     @PostMapping
-    public ResponseEntity<Tweet> createTweet(@RequestBody String content){
-        User user = getCurrentUser();
+    public ResponseEntity<Tweet> createTweet(@RequestBody String content, @AuthenticationPrincipal User user){
         return ResponseEntity.ok(tweetService.createTweet(user, content));
     }
 
@@ -43,13 +44,20 @@ public class TweetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TweetResponseDto> updateTweet(@PathVariable Long id, @RequestBody Tweet tweet){
-        return ResponseEntity.ok(tweetService.updateTweet(id));
+    public ResponseEntity<TweetResponseDto> updateTweet(@PathVariable Long id, @RequestBody Tweet tweet,@AuthenticationPrincipal User currentUser ){
+        return ResponseEntity.ok(tweetService.updateTweet(id, tweet, currentUser));
     }
 
+    @PatchMapping
+    public ResponseEntity<TweetResponseDto> partialUpdateTweet(@PathVariable Long id, @RequestBody Tweet tweet, @AuthenticationPrincipal User currentUser){
+        return ResponseEntity.ok(tweetService.partialUpdateTweet(id,tweet,currentUser));
+    }
+
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTweet(@PathVariable Long id){
-        tweetService.deleteTweet(id);
+    public ResponseEntity<Void> deleteTweet(@PathVariable Long id, @AuthenticationPrincipal User user){
+        tweetService.deleteTweet(id, user);
         return ResponseEntity.noContent().build();
     }
+
 }

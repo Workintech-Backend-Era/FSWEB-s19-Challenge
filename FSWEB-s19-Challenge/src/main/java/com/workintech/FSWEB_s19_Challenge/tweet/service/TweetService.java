@@ -10,7 +10,8 @@ public interface TweetService {
     Tweet createTweet(User user, String content);
     List<Tweet> getAllTweets();
     List<Tweet> getTweetsByUser(User user);
-    void deleteTweet(Long id);
+    void deleteTweet(Long id, User user);
     TweetResponseDto getTweetById(Long id);
-    TweetResponseDto updateTweet(Long id, Tweet tweet);
+    TweetResponseDto updateTweet(Long id, Tweet tweet, User user);
+    TweetResponseDto partialUpdateTweet(Long id, Tweet tweet, User currentUser);
 }

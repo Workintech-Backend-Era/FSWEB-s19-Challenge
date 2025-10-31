@@ -10,5 +10,5 @@ import com.workintech.FSWEB_s19_Challenge.user.model.User;
 
 public interface CommentLikeRepository extends JpaRepository<CommentLike, Long>{
     long countByComment(Comment comment);
-    Optional<CommentLike> findByUserAndcomment(User user, Comment comment);
+    Optional<CommentLike> findByUserAndComment(User user, Comment comment);
 }
