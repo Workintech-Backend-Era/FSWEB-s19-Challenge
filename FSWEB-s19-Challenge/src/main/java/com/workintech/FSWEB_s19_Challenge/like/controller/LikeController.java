@@ -1,12 +1,16 @@
 package com.workintech.FSWEB_s19_Challenge.like.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.workintech.FSWEB_s19_Challenge.comment.model.Comment;
 import com.workintech.FSWEB_s19_Challenge.like.security.JwtUtil;
 import com.workintech.FSWEB_s19_Challenge.like.service.LikeService;
 import com.workintech.FSWEB_s19_Challenge.user.model.User;
@@ -47,6 +51,34 @@ public class LikeController {
         return ResponseEntity.ok(likeService.getCommentLikeCount(commentId));
     }
 
-    //PutMappingden devam edeceğim
+    @PutMapping("/comment/{commentId}")
+    public ResponseEntity<String> likeCommentPut(@PathVariable Long commentId, Authentication auth){
+        User user = jwtUtil.getCurrentUser(auth);
+        likeService.toggleCommentLike(commentId, user);
+        return ResponseEntity.ok("Comment Process has been done.");
+    }
+
+    @PutMapping("tweet/{tweetId}")
+    public ResponseEntity<String> likeTweetPut(@PathVariable Long tweetId, Authentication auth){
+        User user = jwtUtil.getCurrentUser(auth);
+        likeService.toggleTweetLike(tweetId, user);
+        return ResponseEntity.ok("Tweet Process has been done.");
+    }
+
+    @DeleteMapping("/tweet/{tweetId}")
+    public ResponseEntity<String> deleteTweetLike(@PathVariable Long tweetId,Authentication auth){
+        User user = jwtUtil.getCurrentUser(auth);
+        likeService.deleteTweetLike(tweetId,user);
+        return ResponseEntity.ok("Tweet Like was deleted.");
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    public ResponseEntity<String> deleteCommentLike(@PathVariable Long commentId, Authentication auth){
+        User user = jwtUtil.getCurrentUser(auth);
+        likeService.deleteCommentLike(commentId, user);
+        return ResponseEntity.ok("Comment Like was deleted");
+    }
+
+
 
 }

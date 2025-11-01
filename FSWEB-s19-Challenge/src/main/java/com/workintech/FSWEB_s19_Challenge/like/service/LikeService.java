@@ -7,4 +7,6 @@ public interface LikeService {
     void toggleCommentLike(Long commentId, User user);
     long getTweetLikeCount(Long tweetId);
     long getCommentLikeCount(Long commentId);
+    void deleteTweetLike(Long tweetId, User user);
+    void deleteCommentLike(Long commentId, User user);
 }
