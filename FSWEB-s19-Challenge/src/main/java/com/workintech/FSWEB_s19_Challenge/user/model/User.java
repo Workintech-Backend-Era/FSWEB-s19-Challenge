@@ -85,4 +85,6 @@ public class User {
     @ManyToMany(mappedBy = "followers")
     private Set<User> followings = new HashSet<>();
 
+    //User ve Spring security den devam edeceğim
+
 }

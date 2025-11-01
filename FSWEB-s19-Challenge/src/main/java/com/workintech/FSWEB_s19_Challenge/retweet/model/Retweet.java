@@ -50,5 +50,5 @@ public class Retweet {
     @Column(name="created_at")
     private ZonedDateTime createdAt = ZonedDateTime.now();
 
-    //Retweetin controller,service,dto,mapperı yapılacak + security ksımına devam edilecek
+    
 }
