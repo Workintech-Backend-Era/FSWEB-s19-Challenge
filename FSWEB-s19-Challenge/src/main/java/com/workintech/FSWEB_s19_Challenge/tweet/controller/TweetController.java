@@ -34,7 +34,7 @@ public class TweetController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Tweet>> getAllTweets(){
+    public ResponseEntity<List<TweetResponseDto>> getAllTweets(){
         return ResponseEntity.ok(tweetService.getAllTweets());
     }
 

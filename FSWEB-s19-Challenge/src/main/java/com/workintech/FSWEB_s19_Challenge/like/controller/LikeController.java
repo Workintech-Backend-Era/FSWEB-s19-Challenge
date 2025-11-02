@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.workintech.FSWEB_s19_Challenge.comment.model.Comment;
 import com.workintech.FSWEB_s19_Challenge.security.JwtUtil;
+import com.workintech.FSWEB_s19_Challenge.like.dto.LikeResponseDto;
+import com.workintech.FSWEB_s19_Challenge.like.mapper.LikeMapper;
+import com.workintech.FSWEB_s19_Challenge.like.model.CommentLike;
+import com.workintech.FSWEB_s19_Challenge.like.model.TweetLike;
 import com.workintech.FSWEB_s19_Challenge.like.service.LikeService;
 import com.workintech.FSWEB_s19_Challenge.user.model.User;
 import com.workintech.FSWEB_s19_Challenge.user.repository.UserRepository;
@@ -28,17 +32,17 @@ public class LikeController {
     private final UserRepository userRepository;
 
     @PostMapping("/tweet/{tweetId}")
-    public ResponseEntity<String> toggleTweetLike(@PathVariable Long tweetId, Authentication authentication){
+    public ResponseEntity<LikeResponseDto> toggleTweetLike(@PathVariable Long tweetId, Authentication authentication){
         User currentUser = jwtUtil.getCurrentUser(authentication);
-        likeService.toggleTweetLike(tweetId, currentUser);
-        return ResponseEntity.ok("TWeet like processing has been done.");
+        TweetLike like = likeService.toggleTweetLike(tweetId, currentUser);
+        return ResponseEntity.ok(LikeMapper.toDto(like));
     }
 
     @PostMapping("/comment/{commentId}")
-    public ResponseEntity<String> toggleCommentLike(@PathVariable Long commentId, Authentication authentication){
+    public ResponseEntity<LikeResponseDto> toggleCommentLike(@PathVariable Long commentId, Authentication authentication){
         User currentUser = jwtUtil.getCurrentUser(authentication);
-        likeService.toggleCommentLike(commentId, currentUser);
-        return ResponseEntity.ok("Comment like processing has been done.");
+        CommentLike like = likeService.toggleCommentLike(commentId, currentUser);
+        return ResponseEntity.ok(LikeMapper.toDto(like));
     }
 
     @GetMapping("/tweet/{tweetId}")

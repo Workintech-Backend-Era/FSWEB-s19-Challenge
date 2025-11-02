@@ -1,5 +1,6 @@
 package com.workintech.FSWEB_s19_Challenge.retweet.service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class RetweetServiceImpl implements RetweetService {
                 .user(user)
                 .originalTweet(tweet)
                 .comment(request.comment())
+                .createdAt(ZonedDateTime.now())
                 .build();
 
         return RetweetMapper.toResponse(retweetRepository.save(retweet));
@@ -44,11 +46,12 @@ public class RetweetServiceImpl implements RetweetService {
 
     @Override
     public List<RetweetResponse> getAllByUser(User user) {
-        return retweetRepository.findAll().stream()
-                .filter(r -> r.getUser().equals(user))
+        return retweetRepository.findAllByUser(user)
+                .stream()
                 .map(RetweetMapper::toResponse)
                 .collect(Collectors.toList());
     }
+
 
 
     @Override

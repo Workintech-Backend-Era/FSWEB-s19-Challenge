@@ -36,9 +36,10 @@ public class TweetServiceImpl implements TweetService {
     }
 
     @Override
-    public List<Tweet> getAllTweets() {
+    public List<TweetResponseDto> getAllTweets() {
 
-        return tweetRepository.findAllByOrderByCreatedAtDesc();
+        return tweetRepository.findAllByOrderByCreatedAtDesc()
+                              .stream().map(tweetMapper::toResponseDto).toList();
     }
 
     @Override

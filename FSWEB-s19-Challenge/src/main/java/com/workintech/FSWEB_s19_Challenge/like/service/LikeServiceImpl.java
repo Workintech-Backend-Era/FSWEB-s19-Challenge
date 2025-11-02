@@ -21,63 +21,63 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class LikeServiceImpl implements LikeService {
 
-    private TweetLikeRepository tweetLikeRepository;
-    private CommentLikeRepository commentLikeRepository;
-    private TweetRepository tweetRepository;
-    private CommentRepository commentRepository;
+        private final TweetLikeRepository tweetLikeRepository;
+        private final CommentLikeRepository commentLikeRepository;
+        private final TweetRepository tweetRepository;
+        private final CommentRepository commentRepository;
 
-    @Override
-    public void toggleTweetLike(Long tweetId, User user) {
-        Tweet tweet = tweetRepository.findById(tweetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Tweet Not Found"));
+        @Override
+        public TweetLike toggleTweetLike(Long tweetId, User user) {
+                Tweet tweet = tweetRepository.findById(tweetId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Tweet Not Found"));
 
-        tweetLikeRepository.findByUserAndTweet(user, tweet)
-                .ifPresentOrElse(like -> tweetLikeRepository.delete(like),
-                        () -> tweetLikeRepository.save(TweetLike.builder()
-                                .tweet(tweet)
-                                .user(user)
-                                .build()));
-    }
+                return tweetLikeRepository.findByUserAndTweet(user, tweet)
+                                .map(like -> {
+                                        tweetLikeRepository.delete(like);
+                                        return like;
+                                }).orElseGet(() -> tweetLikeRepository.save(
+                                                TweetLike.builder().tweet(tweet).user(user).build()));
+        }
 
-    @Override
-    public void toggleCommentLike(Long commentId, User user) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not Found"));
+        @Override
+        public CommentLike toggleCommentLike(Long commentId, User user) {
+                Comment comment = commentRepository.findById(commentId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Comment not Found"));
 
-        commentLikeRepository.findByUserAndComment(user, comment)
-                .ifPresentOrElse(like -> commentLikeRepository.delete(like),
-                        () -> commentLikeRepository.save(CommentLike.builder()
-                                .comment(comment)
-                                .user(user)
-                                .build()));
-    }
+                return commentLikeRepository.findByUserAndComment(user, comment)
+                                .map(like -> {
+                                        commentLikeRepository.delete(like);
+                                        return like;
+                                }).orElseGet(() -> commentLikeRepository.save(
+                                                CommentLike.builder().comment(comment).user(user).build()));
+        }
 
-    @Override
-    public long getTweetLikeCount(Long tweetId) {
-        Tweet tweet = tweetRepository.findById(tweetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Tweet Not Found"));
-        return tweetLikeRepository.countByTweet(tweet);
-    }
+        @Override
+        public long getTweetLikeCount(Long tweetId) {
+                Tweet tweet = tweetRepository.findById(tweetId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Tweet Not Found"));
+                return tweetLikeRepository.countByTweet(tweet);
+        }
 
-    @Override
-    public long getCommentLikeCount(Long commentId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not Found"));
-        return commentLikeRepository.countByComment(comment);
-    }
+        @Override
+        public long getCommentLikeCount(Long commentId) {
+                Comment comment = commentRepository.findById(commentId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Comment not Found"));
+                return commentLikeRepository.countByComment(comment);
+        }
 
-    @Override
-    public void deleteTweetLike(Long tweetId, User user) {
-        Tweet tweet = tweetRepository.findById(tweetId)
-                .orElseThrow(() -> new ResourceNotFoundException("Tweet Not Found"));
-        tweetLikeRepository.findByUserAndTweet(user, tweet).ifPresent(tweetLikeRepository::delete);
-    }
+        @Override
+        public void deleteTweetLike(Long tweetId, User user) {
+                Tweet tweet = tweetRepository.findById(tweetId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Tweet Not Found"));
+                tweetLikeRepository.findByUserAndTweet(user, tweet).ifPresent(tweetLikeRepository::delete);
+        }
 
-    @Override
-    public void deleteCommentLike(Long commentId, User user) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Comment not Found"));
-        commentLikeRepository.findByUserAndComment(user, comment).ifPresent(commentLikeRepository::delete);
-    }
+        @Override
+        public void deleteCommentLike(Long commentId, User user) {
+                Comment comment = commentRepository.findById(commentId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Comment not Found"));
+                commentLikeRepository.findByUserAndComment(user, comment).ifPresent(commentLikeRepository::delete);
+        }
 
 }

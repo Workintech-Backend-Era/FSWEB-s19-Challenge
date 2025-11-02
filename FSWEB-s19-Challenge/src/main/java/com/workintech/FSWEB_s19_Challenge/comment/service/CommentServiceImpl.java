@@ -53,11 +53,12 @@ public class CommentServiceImpl implements CommentService{
     public CommentResponseDto create(Comment comment) {
         User currentUser = getAuthenticatedUser();
 
-        Tweet tweet = tweetRepository.findById(comment.getId()).orElseThrow(()->new RuntimeException("Tweet Not Found"));
+        Tweet tweet = tweetRepository.findById(comment.getTweet().getId())
+                                        .orElseThrow(()->new RuntimeException("Tweet Not Found"));
         comment.setUser(currentUser);
         comment.setTweet(tweet);
 
-        if(comment.getParentComment().getId()!=null){
+        if(comment.getParentComment()!=null && comment.getParentComment().getId()!=null){
             Comment parent = commentRepository.findById(comment.getParentComment().getId())
                                                 .orElseThrow(()->new RuntimeException("Parent comment not found"));
             comment.setParentComment(parent);
@@ -75,9 +76,9 @@ public class CommentServiceImpl implements CommentService{
         if(!existing.getUser().getId().equals(user.getId())){
             throw new RuntimeException("You are not allowed to update this comment.");
         }
-        comment.setText(comment.getText());
+        existing.setText(comment.getText());
 
-        return CommentMapper.toDto(commentRepository.save(comment));
+        return CommentMapper.toDto(commentRepository.save(existing));
 
     }
 
@@ -87,11 +88,11 @@ public class CommentServiceImpl implements CommentService{
         Comment existing = commentRepository.findById(id).orElseThrow(()->new RuntimeException("Comment not found"));
 
         if(!existing.getUser().getId().equals(user.getId())){
-            throw new RuntimeException("Comment not Found");
+            throw new RuntimeException("You are not allowed to update this comment.");
         }
 
         if(comment.getText() != null) existing.setText(comment.getText());
-        return CommentMapper.toDto(commentRepository.save(comment));
+        return CommentMapper.toDto(commentRepository.save(existing));
     }
 
     @Override

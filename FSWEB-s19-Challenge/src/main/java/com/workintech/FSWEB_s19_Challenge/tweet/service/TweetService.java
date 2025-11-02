@@ -8,7 +8,7 @@ import com.workintech.FSWEB_s19_Challenge.user.model.User;
 
 public interface TweetService {
     Tweet createTweet(User user, String content);
-    List<Tweet> getAllTweets();
+    List<TweetResponseDto> getAllTweets();
     List<Tweet> getTweetsByUser(User user);
     void deleteTweet(Long id, User user);
     TweetResponseDto getTweetById(Long id);
