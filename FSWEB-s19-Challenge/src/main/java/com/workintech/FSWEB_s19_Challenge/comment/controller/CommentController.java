@@ -52,6 +52,6 @@ public class CommentController {
         return ResponseEntity.ok(commentService.findByTweet(tweetId));
     }
 
-
+//comment domaininden postman isteklerine devam cümle: create(Comment comment) metodundaki hata
 
 }

@@ -6,7 +6,9 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ErrorResponseCreator {
 
     public ResponseEntity<Map<String, Object>> buildErrorResponse(Exception ex, HttpStatus httpStatus, String error){

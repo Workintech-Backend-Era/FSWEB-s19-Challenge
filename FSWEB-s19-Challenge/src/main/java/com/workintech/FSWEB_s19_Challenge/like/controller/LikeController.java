@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.workintech.FSWEB_s19_Challenge.comment.model.Comment;
-import com.workintech.FSWEB_s19_Challenge.like.security.JwtUtil;
+import com.workintech.FSWEB_s19_Challenge.security.JwtUtil;
 import com.workintech.FSWEB_s19_Challenge.like.service.LikeService;
 import com.workintech.FSWEB_s19_Challenge.user.model.User;
 import com.workintech.FSWEB_s19_Challenge.user.repository.UserRepository;

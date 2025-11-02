@@ -48,7 +48,7 @@ public class TweetController {
         return ResponseEntity.ok(tweetService.updateTweet(id, tweet, currentUser));
     }
 
-    @PatchMapping
+    @PatchMapping("/{id}")
     public ResponseEntity<TweetResponseDto> partialUpdateTweet(@PathVariable Long id, @RequestBody Tweet tweet, @AuthenticationPrincipal User currentUser){
         return ResponseEntity.ok(tweetService.partialUpdateTweet(id,tweet,currentUser));
     }

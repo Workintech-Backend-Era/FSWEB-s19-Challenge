@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.workintech.FSWEB_s19_Challenge.comment.model.Comment;
 import com.workintech.FSWEB_s19_Challenge.like.model.TweetLike;
 import com.workintech.FSWEB_s19_Challenge.retweet.model.Retweet;
@@ -39,8 +40,9 @@ public class Tweet {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @Column(name="content", nullable=false, columnDefinition = "TEXT")

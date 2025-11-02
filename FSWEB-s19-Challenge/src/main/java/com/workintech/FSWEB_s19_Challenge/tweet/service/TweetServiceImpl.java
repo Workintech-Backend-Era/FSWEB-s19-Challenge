@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class TweetServiceImpl implements TweetService{
+public class TweetServiceImpl implements TweetService {
 
     private final TweetRepository tweetRepository;
 
@@ -26,10 +26,10 @@ public class TweetServiceImpl implements TweetService{
     public Tweet createTweet(User user, String content) {
 
         Tweet tweet = Tweet
-                            .builder()
-                            .user(user)
-                            .content(content)
-                            .build();
+                .builder()
+                .user(user)
+                .content(content)
+                .build();
 
         return tweetRepository.save(tweet);
 
@@ -51,7 +51,7 @@ public class TweetServiceImpl implements TweetService{
     public void deleteTweet(Long id, User user) {
         Tweet tweet = tweetRepository.findById(id).orElse(null);
 
-        if(!tweet.getUser().getId().equals(user.getId())){
+        if (!tweet.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("Later forbidden ex");
         }
 
@@ -62,16 +62,17 @@ public class TweetServiceImpl implements TweetService{
     public TweetResponseDto getTweetById(Long id) {
 
         return tweetRepository
-                    .findById(id).map(tweetMapper::toResponseDto).orElse(null);
+                .findById(id).map(tweetMapper::toResponseDto).orElse(null);
     }
 
     @Override
-    public TweetResponseDto updateTweet(Long id, Tweet tweet, User user) {
+    public TweetResponseDto updateTweet(Long id, Tweet tweet, User currentUser) {
 
         Tweet existing = tweetRepository.findById(id).orElse(null);
 
-        if(!tweet.getUser().getId().equals(user.getId())){
-            throw new RuntimeException("runtime for now");
+
+        if (!existing.getUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("Bu tweet'i güncelleme yetkiniz yok!");
         }
 
         existing.setContent(tweet.getContent());
@@ -83,11 +84,11 @@ public class TweetServiceImpl implements TweetService{
     public TweetResponseDto partialUpdateTweet(Long id, Tweet tweet, User user) {
         Tweet existing = tweetRepository.findById(id).orElse(null);
 
-        if(!tweet.getUser().getId().equals(user.getId())){
+        if (!existing.getUser().getId().equals(user.getId())) {
             throw new RuntimeException("later forbidden ex");
         }
 
-        if(tweet.getContent()!=null && tweet.getContent().isBlank()){
+        if (tweet.getContent() != null && !tweet.getContent().isBlank()) {
             existing.setContent(tweet.getContent());
         }
 

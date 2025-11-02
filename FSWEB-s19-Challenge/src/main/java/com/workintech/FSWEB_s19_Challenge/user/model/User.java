@@ -1,64 +1,55 @@
 package com.workintech.FSWEB_s19_Challenge.user.model;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Collection;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.workintech.FSWEB_s19_Challenge.comment.model.Comment;
 import com.workintech.FSWEB_s19_Challenge.like.model.CommentLike;
 import com.workintech.FSWEB_s19_Challenge.like.model.TweetLike;
 import com.workintech.FSWEB_s19_Challenge.retweet.model.Retweet;
 import com.workintech.FSWEB_s19_Challenge.tweet.model.Tweet;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name="user", schema="tweeter")
+@Table(name="users", schema="tweeter") // NOTE: changed from "user" to "users" to avoid reserved keyword problems
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="username", unique = true, length=50)
+    @Column(name="username", unique = true, length=50, nullable=false)
     private String username;
 
-    @Column(name="email", unique=true, length=100)
+    @Column(name="email", unique=true, length=100, nullable=false)
     private String email;
 
-    @Column(name="password", unique=true, length=255)
+    // password SHOULD NOT be unique, otherwise different users cannot have same password
+    @Column(name="password", length=255, nullable=false)
     private String password;
 
     @Column(name="bio")
     private String bio;
 
-    @Column(name="created_at")
+    @Column(name="created_at", nullable = false)
     private ZonedDateTime createdAt = ZonedDateTime.now();
 
     //Relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private Set<Tweet> tweets = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade=CascadeType.ALL, orphanRemoval = true)
@@ -85,6 +76,28 @@ public class User {
     @ManyToMany(mappedBy = "followers")
     private Set<User> followings = new HashSet<>();
 
-    //User ve Spring security den devam edeceğim
+    // ---------------- UserDetails methods ----------------
+    // For now we return no authorities; if you add roles later, return them here.
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Set.of();
+    }
 
+    @Override
+    public String getPassword() { return password; }
+
+    @Override
+    public String getUsername() { return username; }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() { return true; }
 }
