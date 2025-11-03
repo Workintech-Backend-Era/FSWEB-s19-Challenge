@@ -15,6 +15,8 @@ import com.workintech.FSWEB_s19_Challenge.tweet.model.Tweet;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.hibernate.annotations.Fetch;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -64,7 +66,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy="user", cascade=CascadeType.ALL, orphanRemoval = true)
     private Set<Retweet> retweets = new HashSet<>();
 
-    @ManyToMany
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "followers",
         schema = "tweeter",
@@ -73,7 +76,8 @@ public class User implements UserDetails {
     )
     private Set<User> followers = new HashSet<>();
 
-    @ManyToMany(mappedBy = "followers")
+    @JsonIgnore
+    @ManyToMany(mappedBy = "followers",fetch = FetchType.EAGER)
     private Set<User> followings = new HashSet<>();
 
     // ---------------- UserDetails methods ----------------
