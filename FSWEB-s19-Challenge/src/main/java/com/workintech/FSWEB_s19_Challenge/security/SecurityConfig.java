@@ -39,6 +39,7 @@ public class SecurityConfig {
             );
 
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.cors().and().csrf().disable();
         return http.build();
     }
 
