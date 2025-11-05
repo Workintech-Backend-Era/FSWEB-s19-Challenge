@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.workintech.FSWEB_s19_Challenge.tweet.dto.TweetRequestDto;
 import com.workintech.FSWEB_s19_Challenge.tweet.dto.TweetResponseDto;
 import com.workintech.FSWEB_s19_Challenge.tweet.model.Tweet;
 import com.workintech.FSWEB_s19_Challenge.tweet.service.TweetService;
@@ -29,8 +30,8 @@ public class TweetController {
     private final TweetService tweetService;
 
     @PostMapping
-    public ResponseEntity<Tweet> createTweet(@RequestBody String content, @AuthenticationPrincipal User user){
-        return ResponseEntity.ok(tweetService.createTweet(user, content));
+    public ResponseEntity<TweetResponseDto> createTweet(@RequestBody TweetRequestDto request, @AuthenticationPrincipal User user){
+        return ResponseEntity.ok(tweetService.createTweet(user, request.content()));
     }
 
     @GetMapping

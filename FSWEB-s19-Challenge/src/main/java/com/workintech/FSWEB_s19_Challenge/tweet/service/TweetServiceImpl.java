@@ -23,7 +23,7 @@ public class TweetServiceImpl implements TweetService {
     private final TweetMapper tweetMapper;
 
     @Override
-    public Tweet createTweet(User user, String content) {
+    public TweetResponseDto createTweet(User user, String content) {
 
         Tweet tweet = Tweet
                 .builder()
@@ -31,7 +31,8 @@ public class TweetServiceImpl implements TweetService {
                 .content(content)
                 .build();
 
-        return tweetRepository.save(tweet);
+        Tweet saved = tweetRepository.save(tweet);
+        return tweetMapper.toResponseDto(saved);
 
     }
 

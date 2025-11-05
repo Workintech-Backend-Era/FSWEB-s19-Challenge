@@ -18,15 +18,16 @@ const TweetForm = ({ onTweetPosted }) => {
     try {
       const res = await axios.post(
         "http://localhost:3000/api/tweets",
-        { content },
+        { content } ,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` , "Content-Type": "application/json"}
         }
       );
 
       // Tweet başarıyla gönderilirse formu sıfırla
       setContent("");
       setError("");
+      console.log("res.data  =>  ",res.data)
       if (onTweetPosted) onTweetPosted(res.data);
     } catch (err) {
       console.error("Tweet gönderilemedi:", err);
